@@ -1,0 +1,21 @@
+# dependencies
+stockwatch-node/node_modules
+stockwatch-react/node_modules
+
+# misc
+stockwatch-node/.DS_Store
+stockwatch-node/.env
+stockwatch-node/.env.local
+stockwatch-node/.env.development.local
+stockwatch-node/.env.test.local
+stockwatch-node/.env.production.local
+
+# misc
+stockwatch-react/.DS_Store
+stockwatch-react/.env
+stockwatch-react/.env.local
+stockwatch-react/.env.development.local
+stockwatch-react/.env.test.local
+stockwatch-react/.env.production.local
+
+
