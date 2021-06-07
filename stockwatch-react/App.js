@@ -1,7 +1,6 @@
 //import { StatusBar } from 'expo-status-bar';
 import React, { Component, useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-//import Navigator from './routes/homeRoute';
+import { StyleSheet} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import SearchScreen from './screens/searchScreen';
