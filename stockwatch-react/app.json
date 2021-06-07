@@ -1,0 +1,12 @@
+{
+  "name": "stockwatch-react",
+  "displayName": "stockwatch-react",
+  "expo": {
+    "name": "stockwatch-react",
+    "slug": "stockwatch-react",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
