@@ -18,4 +18,8 @@ stockwatch-react/.env.development.local
 stockwatch-react/.env.test.local
 stockwatch-react/.env.production.local
 
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 
