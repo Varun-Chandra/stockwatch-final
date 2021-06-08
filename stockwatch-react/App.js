@@ -1,21 +1,53 @@
 //import { StatusBar } from 'expo-status-bar';
-import React, { Component, useState } from 'react';
+import React, { Component, useContext, useState } from 'react';
 import { StyleSheet} from 'react-native';
+
+import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+
+
 import SearchScreen from './screens/searchScreen';
 import StocksScreen from './screens/stocksScreen';
 
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
+
+import { UserContext } from './contexts/userContext';
+
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+
+function MainApp(){
+  return (
+    // <UserContext.Provider value={userToken}>
+          <Tab.Navigator>
+            <Tab.Screen name="Search" component={SearchScreen} />
+            <Tab.Screen name="Stocks" component={StocksScreen} />
+          </Tab.Navigator>
+    // </UserContext.Provider>
+  )
+}
 
 export default function App() 
 {
+  //authenticate value to send username into usercontext
+  const [userToken, setUserToken] = useState(null);
+
+
+  //userToken = useContext(UserContext);
+
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Search" component={SearchScreen} />
-        <Tab.Screen name="Stocks" component={StocksScreen} />
-      </Tab.Navigator>
+    <NavigationContainer theme={DarkTheme}>
+
+        <Stack.Navigator>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="App" component={MainApp} />
+        </Stack.Navigator>
+      
     </NavigationContainer>
   );
 }
@@ -28,6 +60,51 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
 });
+
+/*
+OLD CODE DUMP
+//import { StatusBar } from 'expo-status-bar';
+import React, { Component, useState } from 'react';
+import { StyleSheet} from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+import SearchScreen from './screens/searchScreen';
+import StocksScreen from './screens/stocksScreen';
+import { UserContext } from './contexts/userContext';
+
+const Tab = createBottomTabNavigator();
+
+export default function App() 
+{
+  //authenticate value to send username into usercontext
+
+
+  return (
+    <NavigationContainer theme={DarkTheme}>
+      <UserContext.Provider value="null">
+        <Tab.Navigator>
+          <Tab.Screen name="Search" component={SearchScreen} />
+          <Tab.Screen name="Stocks" component={StocksScreen} />
+        </Tab.Navigator>
+      </UserContext.Provider>
+    </NavigationContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: 40,
+    paddingHorizontal: 20
+  },
+});
+ */
+
+
+
+
+
 
 
 /*

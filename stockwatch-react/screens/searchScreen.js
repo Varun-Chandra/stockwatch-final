@@ -1,21 +1,22 @@
 /*
 MAIN STOCKS VIEWING AND SEARCHING
 */
-import React, {useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Button, TextInput } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {StocksScreen} from './stocksScreen';
+import { UserContext } from '../contexts/userContext';
 import axios from 'axios';
 
 
 const Tab = createBottomTabNavigator();
 
-export default function SearchScreen()
+export default function SearchScreen( { navigation } )
 {
   const [stocks, setStocks] = useState([]);
   const [filteredStocks, setFilteredStocks] = useState([]); //useState for search function
   const [search, setSearch] = useState('');
-  
+
   //Hook to fetch stocks data from backend
   useEffect(() => {
     //Hitting backend stocks API

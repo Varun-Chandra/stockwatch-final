@@ -1,15 +1,15 @@
 /*
-    WATCHLIST AND SHOWING DETAILED INFO ON SELECTION OF STOCK IN WATCHLIST
+    LOGIN
 */
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View} from 'react-native';
 import { UserContext } from '../contexts/userContext';
 
-export default function StocksScreen( {navigation} ) 
+export default function RegisterScreen( { navigation } ) 
 {
     const username = useContext(UserContext);
     return (
-        <Text style={styles.textColor}> Something</Text>
+        <Text style={styles.textColor}> Register Screen</Text>
     );
 }
 
