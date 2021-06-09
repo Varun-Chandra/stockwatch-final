@@ -61,7 +61,7 @@ export default function RegisterScreen( { navigation } )
                         if (res.data.Error === true)
                         {
                             Alert.alert('Sorry!', 'This user has already  been registered!')
-                            console.log("User already exists");
+                            //console.log("User already exists");
                         }
                         else
                         {
