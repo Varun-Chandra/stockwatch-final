@@ -5,6 +5,21 @@ import React, { useContext } from 'react';
 import { StyleSheet, Text, View} from 'react-native';
 import { UserContext } from '../contexts/userContext';
 
+
+const importData = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const result = await AsyncStorage.multiGet(keys);
+  
+      return result.map(req => JSON.parse(req)).forEach(console.log);
+    } catch (error) {
+      console.error(error)
+    }
+}
+
+console.log(importData);
+
+
 export default function StocksScreen( {navigation} ) 
 {
     const username = useContext(UserContext);
@@ -24,3 +39,16 @@ const styles = StyleSheet.create({
         color: 'white'
     }
   });
+
+  /*
+  importData = async () => {
+  try {
+    const keys = await AsyncStorage.getAllKeys();
+    const result = await AsyncStorage.multiGet(keys);
+
+    return result.map(req => JSON.parse(req)).forEach(console.log);
+  } catch (error) {
+    console.error(error)
+  }
+}
+  */

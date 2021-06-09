@@ -7,7 +7,7 @@ import { UserContext } from '../contexts/userContext';
 
 export default function RegisterScreen( { navigation } ) 
 {
-    const username = useContext(UserContext);
+    //const username = useContext(UserContext);
     return (
         <Text style={styles.textColor}> Register Screen</Text>
     );

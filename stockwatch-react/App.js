@@ -34,7 +34,7 @@ function MainApp(){
 export default function App() 
 {
   //authenticate value to send username into usercontext
-  const [userToken, setUserToken] = useState(null);
+  //const [userToken, setUserToken] = useState(null);
 
 
   //userToken = useContext(UserContext);
