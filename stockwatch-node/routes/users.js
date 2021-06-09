@@ -9,13 +9,7 @@ router.get('/', function(req, res, next) {
 
 //USER REGISTRATION
 router.post('/register', function(req, res, next){
-  //let temp = JSON.stringify(req.params);
 
-  //temp = JSON.parse(temp);
-
-  //const email = temp['email']
-  //const username = temp['username']
-  //const password = temp['password'] //ENCRYPT THIS TO COMPARE
 
   const email=req.body.email;
   const username=req.body.username;
@@ -23,48 +17,69 @@ router.post('/register', function(req, res, next){
 
   //checking if user already exists in DB
   const queryUsers = req.db.from('users').select("*").where("email", '=', email)
+
+
+
   queryUsers.then((users) =>{
     
     if (users.length > 0) 
     {
       console.log("User already exists")
-      return res.json({"Error" : true, "Message" : "User already exists in DB!"});
+
+      //return res.json({"Error" : true, "Message" : "User already exists in DB!"});
+      return;
+      //return res.status(401).json({"Error": true, "Message": "Unauthorized - User already exists in DB!"});
+      
     }
     //Encrypting password
     const saltRounds = 10
     const hash = bcrypt.hashSync(password, saltRounds);
+
+ 
     return req.db.insert({email: `${email}`, username: `${username}`, password: `${hash}`}).into('users');
   })
+  .catch((err) => {
+      console.log(err);       
+      res.json({"Error" : true, "Message" : "Error in MySQL query"}) 
+  })
 
-  return res.json({"Error" : false, "Message" : "User added to DB!"});
+  return res.json({"Error" : false, "Message" : "Added to DB!"});
 });
 
 
 //USER LOGIN
-router.get('/fetchUser/:username/:password', function(req, res, next) {
-  
-  let temp = JSON.stringify(req.params);
+router.post('/fetchUser', function(req, res, next) {
 
-  temp = JSON.parse(temp);
+  const username = req.body.username;
+  const password = req.body.password;
 
-  const username = temp['username']
-  const password = temp['password'] //ENCRYPT THIS TO COMPARE
-
-  //console.log(`username: ${username}`);
-  //console.log(`password: ${password}`);
+  const queryUsers = req.db.from('users').where('username', '=' , `${username}`).select("username", "password") 
 
 
-
-  req.db.from('users').where('username', '=' , `${username}`).andWhere('password', '=', `${password}`).select("username", "password") 
-  .then((rows) => {
+  queryUsers.then((rows) => {
     if(rows.length === 0)
     {
-      return res.json({"Error" : true, "Message" : "User not found", "users" : rows});  
+      //user doesnt exist
+      return;
+      //return res.json({"Error" : true, "Message" : "User not found", "users" : rows});  
     }
-    else
+    
+    const user=rows[0]
+
+    return bcrypt.compare(password, user.password);
+
+    //return res.json({"Error" : false, "Message" : "Success", "users" : rows});
+  })
+  .then((match) =>{
+    if (!match)
     {
-      return res.json({"Error" : false, "Message" : "Success", "users" : rows});
+      console.log('Passwords dont match')
+      return;
+      //res.status(401).json({"Error": true, "Message": "Unauthorized - Passwords do not match"});
     }
+
+    console.log('passwords match')
+    return res.json({"Error" : false, "Message" : "Success"});
   })
   .catch((err) => {
       console.log(err);       

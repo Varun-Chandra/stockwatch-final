@@ -5,7 +5,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View} from 'react-native';
 import { UserContext } from '../contexts/userContext';
-//import {HOSTNAME} from '../getHostname';
+import {HOST_URL} from '../getHostname';
 
 
 
@@ -43,25 +43,32 @@ export default function LoginScreen( { navigation } )
         style={styles.button}
         title="Proceed to App"
         onPress={() => {
+
+            const data = {
+                'username': `${username}`,
+                'password': `${password}`
+            }
+
             //Authenticate User here
-            axios.get(`http://localhost:3001/users/fetchUser/${username}/${password}`)
+            axios.post(`${HOST_URL}/users/fetchUser`, data)
             .then((res) => {
                 //console.log(res.data.Error);
 
                 if (res.data.Error === true)
                 {
-                    console.log("User did not exist");
+                    console.log("User does not exist");
                 }
                 else
                 {
                     console.log("User Exists");
+                    navigation.navigate("App");
                 }
                 //const {data} = res.data;
                 //console.log(JSON.stringify(data));
                 //if the "error" value in datajson is false, user exists, and can be taken to app
             })
             //if successful
-            navigation.navigate("App");
+            
         }} 
         />
 
