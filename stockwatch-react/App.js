@@ -21,32 +21,40 @@ const Stack = createStackNavigator();
 
 
 function MainApp(){
+  
   return (
-    // <UserContext.Provider value={userToken}>
-          <Tab.Navigator>
-            <Tab.Screen name="Search" component={SearchScreen} />
-            <Tab.Screen name="Stocks" component={StocksScreen} />
-          </Tab.Navigator>
-    // </UserContext.Provider>
+    <Tab.Navigator>
+      <Tab.Screen name="Stocks" component={StocksScreen} />
+      <Tab.Screen name="Search" component={SearchScreen} />
+            
+    </Tab.Navigator>
   )
 }
+
+/*
+// <UserContext.Provider value={userToken}>
+          
+    // </UserContext.Provider>
+ */
 
 export default function App() 
 {
   //authenticate value to send username into usercontext
   //const [userToken, setUserToken] = useState(null);
-
-
-  //userToken = useContext(UserContext);
+  const [usr, setUsr] = useState('');
 
   return (
     <NavigationContainer theme={DarkTheme}>
+      <UserContext.Provider value={{usr, setUsr}}>
+          <Stack.Navigator>
+            
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+              <Stack.Screen name="App" component={MainApp} />
 
-        <Stack.Navigator>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="App" component={MainApp} />
-        </Stack.Navigator>
+          </Stack.Navigator>
+
+      </UserContext.Provider>
       
     </NavigationContainer>
   );

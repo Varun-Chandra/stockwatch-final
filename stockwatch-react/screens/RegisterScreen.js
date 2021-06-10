@@ -13,6 +13,9 @@ import {HOST_URL} from '../getHostname';
 export default function RegisterScreen( { navigation } ) 
 {
     //const username = useContext(UserContext);
+
+    const IP_ADDRESS = `http://172.30.71.180`;
+
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -53,8 +56,12 @@ export default function RegisterScreen( { navigation } )
                         'username': `${username}`,
                         'password': `${password}` 
                     }
+
+                    //const REGISTER_URL = `${HOST_URL}/users/register`;
+                    const REGISTER_URL = `${IP_ADDRESS}/users/fetchUser`;
+
                     //Store User in DB here
-                    axios.post(`${HOST_URL}/users/register`, data)
+                    axios.post(REGISTER_URL, data)
                     .then((res) => {
                         //console.log(res.data.Error);
 

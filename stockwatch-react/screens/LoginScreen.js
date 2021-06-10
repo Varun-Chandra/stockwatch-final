@@ -2,19 +2,25 @@
     LOGIN
 */
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+
 import { Button, StyleSheet, Text, TextInput, View} from 'react-native';
+
 import { UserContext } from '../contexts/userContext';
+
 import {HOST_URL} from '../getHostname';
 
-
-
+const IP_ADDRESS = `http://172.30.71.180`;
 
 export default function LoginScreen( { navigation } ) 
 {
-    //const username = useContext(UserContext);
+    const {usr, setUsr} = useContext(UserContext);
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    //FETCHING PUBLIC IP FOR HITTING BACKEND API
+    
 
     return (
         <View>
@@ -42,15 +48,22 @@ export default function LoginScreen( { navigation } )
         <Button
         style={styles.button}
         title="Proceed to App"
-        onPress={() => {
+        onPress={ async () => {
+
+            console.log(`Username - ${username}`)
+            console.log(`Password - ${password}`)
 
             const data = {
                 'username': `${username}`,
                 'password': `${password}`
             }
 
+            //const LOGIN_CHECK = `${HOST_URL}/users/fetchUser`
+            const LOGIN_CHECK = `${IP_ADDRESS}:3001/users/fetchUser`
+
+
             //Authenticate User here
-            axios.post(`${HOST_URL}/users/fetchUser`, data)
+            await axios.post(LOGIN_CHECK, data)
             .then((res) => {
                 //console.log(res.data.Error);
 
@@ -60,6 +73,8 @@ export default function LoginScreen( { navigation } )
                 }
                 else
                 {
+                    setUsr(username);//For context
+
                     console.log("User Exists");
                     navigation.navigate("App");
                 }
@@ -67,7 +82,7 @@ export default function LoginScreen( { navigation } )
                 //console.log(JSON.stringify(data));
                 //if the "error" value in datajson is false, user exists, and can be taken to app
             })
-            //if successful
+            .catch((err) => console.log(err))
             
         }} 
         />

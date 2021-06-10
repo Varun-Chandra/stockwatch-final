@@ -4,14 +4,13 @@ MAIN STOCKS VIEWING AND SEARCHING
 import React, {useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {StocksScreen} from './stocksScreen';
+
 import { UserContext } from '../contexts/userContext';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import axios from 'axios';
 
-
-const Tab = createBottomTabNavigator();
 
 const FMP_API_KEY = "6c536f3a6e0d668103fad100eeef94a1";
 
@@ -21,14 +20,18 @@ export default function SearchScreen( { navigation } )
   const [filteredStocks, setFilteredStocks] = useState([{}]); //useState for search function
   const [search, setSearch] = useState('');
 
+  const {usr, setUsr} = useContext(UserContext);
+
   const STOCK_ENDPOINT = `https://financialmodelingprep.com/api/v3/nasdaq_constituent?apikey=${FMP_API_KEY}`;
+
+  // AsyncStorage.clear();
+  // console.log('storage cleared');
 
   //Hook to fetch stocks data from backend
   useEffect(() => {
     //Hitting backend stocks API
 
     //.get('http://localhost:3001/stocks')
-
 
     axios
       .get(STOCK_ENDPOINT)
@@ -37,6 +40,7 @@ export default function SearchScreen( { navigation } )
 
         let symbols = data.map(item => {  //mapping json data to an array
           return {
+            counter: data.indexOf(item),
             symbol: item.symbol,
             name: item.name
           }
@@ -48,19 +52,6 @@ export default function SearchScreen( { navigation } )
   }, [])
 
   
-  //function to add symbol to asyncstorage on click
-  const addToWatchList = async (item) => {
-    //console.log(item); //reads symbol for storage to asyncstorage
-    try{
-      await AsyncStorage.setItem(`@Key-${item}`, item)
-    }
-    catch (err)
-    {
-      console.log(err);
-      Alert.alert('Alert!', 'Item already stored!')
-    }
-
-  }
 
 
   //Function to help search stocks in flatlist
@@ -82,21 +73,27 @@ export default function SearchScreen( { navigation } )
     }
   }
 
-  //console.log(stocks);
+  // keyExtractor= {(item) => item.counter.toString()}
   return (
     <View>
       <TextInput 
-        styles={styles.textInput}
+        style={styles.textInput}
         value={search}
         placeholder="type something!"
         onChangeText={(text) => filterStock(text)}
       />
       
       <FlatList
-          keyExtractor= {(item) => stocks.indexOf(item).toString()}
           data={filteredStocks}
           renderItem={( { item }) => (
-            <TouchableOpacity onPress={() => addToWatchList(item.symbol)}>
+            //Creating touchable opacity to add item to watchlist on click
+            <TouchableOpacity onPress={ async () => 
+              {
+                console.log(`Selected ${item.symbol}`);
+                
+              }}
+            >
+            
             <>
               <Text style={styles.item}>
                 {item.symbol} - {item.name}
@@ -125,17 +122,32 @@ const styles = StyleSheet.create({
     },
     textInput: {
       color: 'white',
-      marginTop: 10,
-      height: 40,
-      borderWidth: 1,
-      padding: 20,
-      margin: 5,
-      borderColor: '#000',
-      backgroundColor: 'grey'
-    }
+      paddingLeft: 5,
+      borderColor: 'grey',
+      borderWidth: 2,
+      marginBottom: 4
+  },
 });
 
 /*
+OLD ASYNCSTORAGE CODE
+    //store in asyncstorage with key @username-symbol
+    if ( await AsyncStorage.getItem(`@${usr}-${item.symbol}`))
+    {
+      //item already exists
+      Alert.alert('Sorry', 'This item has already been added to your watchlist') 
+    }
+    else
+    {
+      //add item to asyncstorage
+      await AsyncStorage.setItem(`@${usr}-${item.symbol}`, `${item.symbol}`);
+      Alert.alert('Added to Watchlist', 'This item has been added to your watchlist')
+    }
+
+
+
+
+
 const [stocks, setStocks] = useState([
         { symbol: 'AAPL'},
         { symbol: 'ZM'},
