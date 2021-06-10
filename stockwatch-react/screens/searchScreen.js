@@ -3,16 +3,18 @@ MAIN STOCKS VIEWING AND SEARCHING
 */
 import React, {useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, Alert } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { UserContext } from '../contexts/userContext';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useStocksContext } from '../contexts/stocksContext';
 
 import axios from 'axios';
 
 
 const FMP_API_KEY = "6c536f3a6e0d668103fad100eeef94a1";
+
+
 
 export default function SearchScreen( { navigation } )
 {
@@ -20,12 +22,16 @@ export default function SearchScreen( { navigation } )
   const [filteredStocks, setFilteredStocks] = useState([{}]); //useState for search function
   const [search, setSearch] = useState('');
 
+  const[sym, setSym] = useState('');
+
   const {usr, setUsr} = useContext(UserContext);
+
+  const { addToWatchlist } = useStocksContext();
 
   const STOCK_ENDPOINT = `https://financialmodelingprep.com/api/v3/nasdaq_constituent?apikey=${FMP_API_KEY}`;
 
-  // AsyncStorage.clear();
-  // console.log('storage cleared');
+  //AsyncStorage.clear();
+  //console.log('storage cleared');
 
   //Hook to fetch stocks data from backend
   useEffect(() => {
@@ -59,10 +65,10 @@ export default function SearchScreen( { navigation } )
     if(text)
     {
       const updatedList = stocks.filter((item) => {
-        const itemData = item.symbol.toString() ? item.symbol.toString().toUpperCase() : ''.toUpperCase();
-        const searchTextData = text.toUpperCase();
-        return itemData.indexOf(searchTextData) > -1;
-      });
+      const itemData = item.symbol.toString() ? item.symbol.toString().toUpperCase() : ''.toUpperCase();
+      const searchTextData = text.toUpperCase();
+      return itemData.indexOf(searchTextData) > -1;
+    });
       setFilteredStocks(updatedList);
       setSearch(text);
     }
@@ -87,10 +93,15 @@ export default function SearchScreen( { navigation } )
           data={filteredStocks}
           renderItem={( { item }) => (
             //Creating touchable opacity to add item to watchlist on click
-            <TouchableOpacity onPress={ async () => 
+            <TouchableOpacity onPress={ () => 
               {
                 console.log(`Selected ${item.symbol}`);
-                
+                //add to asyncstorage
+                // setSym(`${item.symbol}`);
+                // const symObj = {
+                //   symbol: sym
+                // }
+                addToWatchlist(`${item.symbol}`);
               }}
             >
             

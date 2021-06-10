@@ -8,9 +8,9 @@ import { Button, StyleSheet, Text, TextInput, View} from 'react-native';
 
 import { UserContext } from '../contexts/userContext';
 
-import {HOST_URL} from '../getHostname';
+import {IP_ADDRESS} from '../getIP';
 
-const IP_ADDRESS = `http://172.30.71.180`;
+//const IP_ADDRESS = `http://172.30.71.180`;
 
 export default function LoginScreen( { navigation } ) 
 {

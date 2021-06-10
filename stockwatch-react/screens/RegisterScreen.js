@@ -6,7 +6,7 @@ import axios from 'axios';
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, Button, View, Alert} from 'react-native';
 import { UserContext } from '../contexts/userContext';
-import {HOST_URL} from '../getHostname';
+import {IP_ADDRESS} from '../getIP';
 
 
 
@@ -14,7 +14,7 @@ export default function RegisterScreen( { navigation } )
 {
     //const username = useContext(UserContext);
 
-    const IP_ADDRESS = `http://172.30.71.180`;
+    //const IP_ADDRESS = `http://172.30.71.180`;
 
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');

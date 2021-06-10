@@ -4,16 +4,21 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { useContext, useState, useEffect } from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View, FlatList} from 'react-native';
 import { UserContext } from '../contexts/userContext';
+import { useStocksContext } from '../contexts/stocksContext';
 
 
 export default function StocksScreen( {navigation} ) 
 {
   const {usr, setUsr} = useContext(UserContext);
+  const { state, addToWatchlist } = useStocksContext();
 
   return (
-    <Text style={styles.textColor}> Username: {usr} </Text>
+    <View>
+      <Text style={styles.textColor}> Username: {usr} </Text>
+      <Text style={styles.textColor}> Entry: {state} </Text>
+    </View>
   );
 
 }
@@ -43,4 +48,30 @@ const styles = StyleSheet.create({
     console.error(error)
   }
 }
+
+
+OLD FLATLIST
+<FlatList
+        keyExtractor={(item) => item.symbol}
+        data={state}
+        renderItem={( { item }) => (
+          
+          <View>
+            <Text style={styles.textColor}>
+              {item}
+            </Text>
+          </View>
+        )}
+      />
+<FlatList
+        data={state}
+        renderItem={( { item }) => (
+          
+          <View>
+            <Text style={styles.textColor}>
+              {item}
+            </Text>
+          </View>
+        )}
+      />
   */

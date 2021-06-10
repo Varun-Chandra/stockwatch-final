@@ -15,6 +15,7 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 
 import { UserContext } from './contexts/userContext';
+import { StocksProvider } from './contexts/stocksContext';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,19 +24,14 @@ const Stack = createStackNavigator();
 function MainApp(){
   
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Stocks" component={StocksScreen} />
-      <Tab.Screen name="Search" component={SearchScreen} />
-            
-    </Tab.Navigator>
+    <StocksProvider>
+      <Tab.Navigator>
+        <Tab.Screen name="Stocks" component={StocksScreen} />
+        <Tab.Screen name="Search" component={SearchScreen} />
+      </Tab.Navigator>
+    </StocksProvider>
   )
 }
-
-/*
-// <UserContext.Provider value={userToken}>
-          
-    // </UserContext.Provider>
- */
 
 export default function App() 
 {
@@ -48,9 +44,10 @@ export default function App()
       <UserContext.Provider value={{usr, setUsr}}>
           <Stack.Navigator>
             
-              <Stack.Screen name="Login" component={LoginScreen} />
-              <Stack.Screen name="Register" component={RegisterScreen} />
-              <Stack.Screen name="App" component={MainApp} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="App" component={MainApp} />
+           
 
           </Stack.Navigator>
 
