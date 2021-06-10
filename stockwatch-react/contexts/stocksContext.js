@@ -6,7 +6,7 @@ import { UserContext } from '../contexts/userContext';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const StocksContext = React.createContext(['']);
+const StocksContext = React.createContext([]);
 
 export const StocksProvider = ({ children }) => {
 
