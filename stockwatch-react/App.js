@@ -7,12 +7,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 
 import SearchScreen from './screens/searchScreen';
 import StocksScreen from './screens/stocksScreen';
-
-import LoginScreen from "./screens/LoginScreen";
-import RegisterScreen from "./screens/RegisterScreen";
+import DetailsScreen from './screens/detailsScreen';
 
 import { UserContext } from './contexts/userContext';
 import { StocksProvider } from './contexts/stocksContext';
@@ -24,12 +24,12 @@ const Stack = createStackNavigator();
 function MainApp(){
   
   return (
-    <StocksProvider>
+    
       <Tab.Navigator>
         <Tab.Screen name="Stocks" component={StocksScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
       </Tab.Navigator>
-    </StocksProvider>
+    
   )
 }
 
@@ -40,20 +40,21 @@ export default function App()
   const [usr, setUsr] = useState('');
 
   return (
-    <NavigationContainer theme={DarkTheme}>
-      <UserContext.Provider value={{usr, setUsr}}>
-          <Stack.Navigator>
+      <NavigationContainer theme={DarkTheme}>
+        <UserContext.Provider value={{usr, setUsr}}>
+          <StocksProvider>
+            <Stack.Navigator>
+              
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+              <Stack.Screen name="App" component={MainApp} />
+              <Stack.Screen name="Details" component={DetailsScreen} />
             
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-            <Stack.Screen name="App" component={MainApp} />
-           
-
-          </Stack.Navigator>
-
-      </UserContext.Provider>
-      
-    </NavigationContainer>
+            </Stack.Navigator>
+          </StocksProvider>
+        </UserContext.Provider>
+      </NavigationContainer>
+    
   );
 }
 

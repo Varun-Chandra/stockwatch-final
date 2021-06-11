@@ -23,7 +23,7 @@ export default function LoginScreen( { navigation } )
     
 
     return (
-        <View>
+        <View style={styles.container}>
         <Text style={styles.textColor}> Login Screen</Text>
         <Text style={styles.textColor}> Username</Text>
         <TextInput 
@@ -78,9 +78,6 @@ export default function LoginScreen( { navigation } )
                     console.log("User Exists");
                     navigation.navigate("App");
                 }
-                //const {data} = res.data;
-                //console.log(JSON.stringify(data));
-                //if the "error" value in datajson is false, user exists, and can be taken to app
             })
             .catch((err) => console.log(err))
             
@@ -94,7 +91,6 @@ export default function LoginScreen( { navigation } )
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
         paddingTop: 40,
         paddingHorizontal: 20
     },
@@ -109,6 +105,8 @@ const styles = StyleSheet.create({
         marginBottom: 4
     },
     button: {
-        marginBottom: 4
+        marginBottom: 10,
+        padding: 10,
+        marginTop: 10
     }
   });

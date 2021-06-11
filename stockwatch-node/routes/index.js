@@ -15,7 +15,7 @@ router.post('/fetchSymbols', function(req, res, next){
 
   req.db.from('watchList').where( 'username', `${username}`).select("symbol") 
   .then((rows) => {
-    return res.json({"Error" : false, "Message" : "Success", "Symbol" : rows})
+    return res.json({"Error" : false, "Message" : "Success", "Symbols" : rows})
   })
   .catch((err) => {
       console.log(err);       
@@ -25,7 +25,7 @@ router.post('/fetchSymbols', function(req, res, next){
 
 
 //FOR WATCHLIST - INSERT SYMBOL INTO WATCHLIST FOR CURRENT USER FROM DB
-router.post('/fetchSymbols', function(req, res, next){
+router.post('/insertSymbol', function(req, res, next){
   
   const username = req.body.username;
   const symbol = req.body.symbol;
