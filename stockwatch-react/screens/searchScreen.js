@@ -93,33 +93,37 @@ export default function SearchScreen( { navigation } )
       <Text style={styles.searchText}>
         Search
       </Text>
+      
       <TextInput 
         style={styles.textInput}
         value={search}
         placeholder="type something!"
         onChangeText={(text) => filterStock(text)}
       />
-      
-      <FlatList
-          data={filteredStocks}
-          renderItem={( { item }) => (
-            //Creating touchable opacity to add item to watchlist on click
-            <TouchableOpacity onPress={ () => 
-              {
-                console.log(`Selected ${item.symbol}`);
-                
-                addToWatchlist(item.symbol);//add to DB
-                navigation.navigate('Stocks');
-              }}
-            > 
-            <View>
-              <Text style={styles.item}>
-                {item.symbol} - {item.name}
-              </Text>
-            </View>
-            </TouchableOpacity>
-          )}
-      />
+
+      <View style={styles.listStyle}>
+        <FlatList
+            data={filteredStocks}
+            renderItem={( { item }) => (
+              //Creating touchable opacity to add item to watchlist on press
+              <TouchableOpacity onPress={ () => 
+                {
+                  console.log(`Selected ${item.symbol}`);
+                  
+                  addToWatchlist(item.symbol);//add to DB
+
+                  navigation.navigate('Stocks');
+                }}
+              > 
+              <View>
+                <Text style={styles.item}>
+                  {item.symbol} - {item.name}
+                </Text>
+              </View>
+              </TouchableOpacity>
+            )}
+        />
+      </View>
     </ScrollView>
   );
 }
@@ -159,6 +163,10 @@ const styles = StyleSheet.create({
       borderWidth: 2,
       marginBottom: 4
   },
+  listStyle: {
+    flex: 1,
+    marginTop: 10
+  }
 });
 
 /*

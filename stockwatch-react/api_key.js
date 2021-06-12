@@ -1,1 +1,3 @@
-export const FMP_API_KEY = "6c536f3a6e0d668103fad100eeef94a1";
+export const FMP_API_KEY = "63aaa84597e88896caaf127196e335fa";
+
+//OLD KEY - 6c536f3a6e0d668103fad100eeef94a1

@@ -3,7 +3,7 @@
 */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, Text, ScrollView, FlatList, Button, TouchableOpacity} from 'react-native';
 import { UserContext } from '../contexts/userContext';
 import { useStocksContext } from '../contexts/stocksContext';
@@ -16,35 +16,79 @@ export default function StocksScreen( {navigation} )
 
   const { state, addToWatchlist } = useStocksContext();
   
-  const [entries, setEntries] = useState([{}]);
-  //const [filteredStocks, setFilteredStocks] = useState([{}]);
+  const [entries, setEntries] = useState([]);
+  
 
-  //console.log(`state - ${JSON.stringify(state)}`);
+  
+
+  // //hitting the FMP quote API endpoint to populate flatlist with symbol, changesPercentage and price for each stock on watchlist
+  useEffect(() => {   
+
+    // state.filter((stateSym) => {     
+      
+    //   axios.get(`https://financialmodelingprep.com/api/v3/quote/${stateSym.symbol}?apikey=${FMP_API_KEY}`)
+    //   .then((res) => {
+    //     const syms = res.data
+    //     let objArr = [];
+    //     syms.map((item) => {
+    //       let objects = {
+    //         symbol: stateSym.symbol,
+    //         changes: item.changesPercentage,
+    //         price: item.price
+    //       }
+
+    //       objArr.push(objects);
+    //     })
+    //     setEntries((oldArr) => [...oldArr, ...objArr]);
+        
+        
+    //   })
+    //   .catch((err) => console.log(err));
+    // })
+    const mockData = [{
+      symbol: 'Sym1',
+      changes: 'changePercValue1',
+      price: 'Price1'
+    }, {
+      symbol: 'Sym2',
+      changes: 'changePercValue2',
+      price: 'Price2'
+    }, {
+      symbol: 'Sym3',
+      changes: 'changePercValue3',
+      price: 'Price3'
+    }]
+  
+    setEntries(mockData);
+
+    //console.log(entries);
+  }, [])
+  
   
 
   return (
     <ScrollView>
       <Text style={styles.textHeader}> Hello {`${usr}`}! </Text>
       <Text style={styles.bodyText}>Here is your watchlist! Select any stock from this list to view its performance!</Text>
-      
+      {/* {DXCM} - {0.3} - {400.19} */}
       <FlatList
-          data={state}
+          data={entries}
           renderItem={( { item }) => (
             //Creating touchable opacity to add item to watchlist on click
             <>
-              <TouchableOpacity onPress = {() =>{
-                navigation.navigate('Details');  
-              }
-            }
-              
-              >
+              <TouchableOpacity onPress = {() => {
+                navigation.navigate('Details', {symbol: item.symbol});  
+              }}
+              > 
                 <Text style={styles.item}>
-                  {item.symbol}
+                  {item.symbol} - ({item.changes}) - ({item.price}) 
                 </Text>
+
               </TouchableOpacity>
             </>
           )}
       />
+      
     </ScrollView>
   );
 
