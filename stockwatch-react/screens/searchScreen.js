@@ -4,7 +4,7 @@ MAIN STOCKS VIEWING AND SEARCHING
 import React, {useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 
-//import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import { UserContext } from '../contexts/userContext';
 import { useStocksContext } from '../contexts/stocksContext';
@@ -19,37 +19,32 @@ export default function SearchScreen( { navigation } )
   const [filteredStocks, setFilteredStocks] = useState([{}]); //useState for search function
   const [search, setSearch] = useState('');
 
-  //const[sym, setSym] = useState('');
 
   const {usr, setUsr} = useContext(UserContext);
 
   const { addToWatchlist } = useStocksContext();
 
-  //const symbolObject = { symbol: sym }; //Object to send for storing
-
   const STOCK_ENDPOINT = `https://financialmodelingprep.com/api/v3/nasdaq_constituent?apikey=${FMP_API_KEY}`;
 
-  // AsyncStorage.clear();
-  // console.log('storage cleared');
+ 
 
   //Hook to fetch stocks data from backend
   useEffect(() => {
     //Hitting backend stocks API
-
-    //.get('http://localhost:3001/stocks')
 
     axios
       .get(STOCK_ENDPOINT)
       .then(res => {
         let data = res.data //has the json response itself
 
-        let symbols = data.map(item => {  //mapping json data to an array
+        //mapping json data to an object that will later be fed into flatlist
+        let symbols = data.map(item => {  
           return {
             symbol: item.symbol,
             name: item.name
           }
         })
-        //console.log(symbols);
+        
         setStocks(symbols); //Main stock list
         setFilteredStocks(symbols);//For search purposes
       })
@@ -83,15 +78,15 @@ export default function SearchScreen( { navigation } )
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.textHeader}> 
-        Pick a Stock! 
+        Hello {`${usr}`}!
       </Text>
               
       <Text style={styles.bodyText}>
-        Select a stock from any of the NASDAQ stocks shown below. Use the search function to lookup specific stock symbols and pick one you like!
+        Select a stock from any of the NASDAQ stocks shown below and add it to your watchlist. 
       </Text>
 
       <Text style={styles.searchText}>
-        Search
+        Use the search bar below! to lookup specific stock symbols and pick one you like!
       </Text>
       
       <TextInput 

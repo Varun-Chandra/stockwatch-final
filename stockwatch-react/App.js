@@ -26,8 +26,8 @@ function MainApp(){
   return (
     
       <Tab.Navigator>
-        <Tab.Screen name="Stocks" component={StocksScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
+        <Tab.Screen name="Stocks" component={StocksScreen} />
       </Tab.Navigator>
     
   )
