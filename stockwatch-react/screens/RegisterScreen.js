@@ -5,50 +5,48 @@ import axios from 'axios';
 
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, Button, View, Alert} from 'react-native';
-import { UserContext } from '../contexts/userContext';
 import {IP_ADDRESS} from '../getIP';
 
 
 
 export default function RegisterScreen( { navigation } ) 
 {
-    //const username = useContext(UserContext);
-
-    //const IP_ADDRESS = `http://172.30.71.180`;
-
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     return (
         <View>
-            <Text style={styles.textColor}> Register Screen</Text>
+            <Text style={styles.textHeader}> Hello, almost-a-User!</Text>
+            <Text style={styles.subHeaderText}> Register your credentials below!</Text>
             
-            <Text style={styles.textColor}> Email</Text>
+            <Text style={styles.subHeaderText}> Email</Text>
             <TextInput 
                 style={styles.textInput}
                 placeholder='Enter Email..'
                 onChangeText = {text => setEmail(text)}
             />
             
-            <Text style={styles.textColor}> Username</Text>
+            <Text style={styles.subHeaderText}> Username</Text>
             <TextInput 
                 style={styles.textInput}
                 placeholder='Enter Username..'
                 onChangeText = {text => setUsername(text)}
             />
 
-            <Text style={styles.textColor}> Password</Text>
+            <Text style={styles.subHeaderText}> Password</Text>
 
             <TextInput 
                 style={styles.textInput}
                 placeholder='Enter Password..'
+                secureTextEntry={true}
                 onChangeText = {text => setPassword(text)}
             />
 
             <Button
                 style={styles.button}
-                title="Proceed to App"
+                title="Register Me!"
+                disabled={(!password) || (!username) || (!email)}
                 onPress={() => {
 
                     const data = {
@@ -96,17 +94,26 @@ const styles = StyleSheet.create({
         paddingTop: 40,
         paddingHorizontal: 20
     },
-    textColor: {
-        color: 'white'
-    },
     textInput: {
         color: 'white',
         paddingLeft: 5,
         borderColor: 'grey',
         borderWidth: 2,
-        marginBottom: 4
+        marginBottom: 30
     },
     button: {
         marginBottom: 4
-    }
+    },
+    textHeader: {
+        color: 'white',
+        fontSize: 30,
+        paddingLeft: 20,
+        textDecorationLine: 'underline'
+    },
+    subHeaderText: {
+        color: 'white',
+        fontSize: 20,
+        margin: 10,
+        paddingTop: 10,
+    },
   });

@@ -4,7 +4,7 @@
 import axios from 'axios';
 import React, { useState, useContext } from 'react';
 
-import { Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import { Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import { UserContext } from '../contexts/userContext';
 
@@ -17,73 +17,76 @@ export default function LoginScreen( { navigation } )
     const {usr, setUsr} = useContext(UserContext);
 
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-
-    //FETCHING PUBLIC IP FOR HITTING BACKEND API
-    
+    const [password, setPassword] = useState('');    
 
     return (
-        <View style={styles.container}>
-        <Text style={styles.textColor}> Login Screen</Text>
-        <Text style={styles.textColor}> Username</Text>
-        <TextInput 
-            style={styles.textInput}
-            placeholder='Enter Username..'
-            onChangeText = {text => setUsername(text)}
-        />
+        <View>
+            <Text style={styles.textHeader}> StockWatch Mobile</Text>
+            <Text style={styles.subHeaderText}> Welcome! Please enter your credentials!</Text>
 
-        <Text style={styles.textColor}> Password</Text>
+            {/* Username and Password FieldInputs */}
+            <Text style={styles.subHeaderText}> Username</Text>
+            <TextInput 
+                style={styles.textInput}
+                placeholder='Enter Username..'
+                onChangeText = {text => setUsername(text)}
+            />
 
-        <TextInput 
-            style={styles.textInput}
-            placeholder='Enter Username..'
-            onChangeText = {text => setPassword(text)}
-        />
-
-        <Button
-        style={styles.button} 
-        title="Register"
-        onPress={() => {navigation.navigate("Register")}} />
-
-        <Button
-        style={styles.button}
-        title="Proceed to App"
-        onPress={ async () => {
-
-            console.log(`Username - ${username}`)
-            console.log(`Password - ${password}`)
-
-            const data = {
-                'username': `${username}`,
-                'password': `${password}`
-            }
-
-            //const LOGIN_CHECK = `${HOST_URL}/users/fetchUser`
-            const LOGIN_CHECK = `${IP_ADDRESS}:3001/users/fetchUser`
-
-
-            //Authenticate User here
-            await axios.post(LOGIN_CHECK, data)
-            .then((res) => {
-                //console.log(res.data.Error);
-
-                if (res.data.Error === true)
-                {
-                    console.log("User does not exist");
-                }
-                else
-                {
-                    setUsr(username);//For context
-
-                    console.log("User Exists");
-                    navigation.navigate("App");
-                }
-            })
-            .catch((err) => console.log(err))
+            <Text style={styles.subHeaderText}> Password</Text>
             
-        }} 
-        />
+            <TextInput 
+                style={styles.textInput}
+                placeholder='Enter Password..'
+                onChangeText={text => setPassword(text)}
+                secureTextEntry={true}
+            />
+            {/* Login and Register Button/Touchable Opacity */}
+            <Button
+            style={styles.button}
+            title="Login"
+            disabled={(!password) || (!username)}
+            onPress={ async () => {
 
+                console.log(`Username - ${username}`)
+                console.log(`Password - ${password}`)
+
+                const data = {
+                    'username': `${username}`,
+                    'password': `${password}`
+                }
+
+                const LOGIN_CHECK = `${IP_ADDRESS}:3001/users/fetchUser`
+
+
+                //Authenticate User here
+                await axios.post(LOGIN_CHECK, data)
+                .then((res) => {
+                    if (res.data.Error === true)
+                    {
+                        console.log("User does not exist");
+                        Alert.alert('Sorry!', 'User does not exist!');
+                    }
+                    else
+                    {
+                        setUsr(username);//For context
+
+                        console.log("User Exists");
+                        navigation.navigate("App");
+                    }
+                })
+                .catch((err) => console.log(err))
+                
+            }} 
+            />
+
+            <View>
+                <Text style={styles.subHeaderText}> Don't have an account?</Text>
+                <TouchableOpacity onPress={() => {navigation.navigate("Register")}}>
+                    <View style={styles.regBtn}>
+                        <Text style={styles.textBtn}> Tap here to Register!</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -94,19 +97,39 @@ const styles = StyleSheet.create({
         paddingTop: 40,
         paddingHorizontal: 20
     },
-    textColor: {
-        color: 'white'
-    },
     textInput: {
         color: 'white',
-        paddingLeft: 5,
+        paddingLeft: 10,
         borderColor: 'grey',
         borderWidth: 2,
-        marginBottom: 4
+        marginBottom: 20
     },
     button: {
         marginBottom: 10,
         padding: 10,
-        marginTop: 10
+        paddingTop: 30
+    },
+    textBtn: {
+        color: 'white',
+        borderColor: 'white',
+        fontSize: 15,
+        borderWidth: 2,
+        alignContent: 'center',
+    },
+    textHeader: {
+        color: 'white',
+        fontSize: 30,
+        paddingLeft: 20,
+        textDecorationLine: 'underline'
+    },
+    subHeaderText: {
+        color: 'white',
+        fontSize: 20,
+        margin: 10,
+        paddingTop: 10,
+    },
+    regBtn: {
+        flexDirection: 'row',
+        justifyContent: 'center'
     }
   });

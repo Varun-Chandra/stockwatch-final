@@ -2,6 +2,8 @@
 import React, { Component, useContext, useState } from 'react';
 import { StyleSheet} from 'react-native';
 
+import TabBarIcon from './tabBarIcon';
+
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -26,8 +28,22 @@ function MainApp(){
   return (
     
       <Tab.Navigator>
-        <Tab.Screen name="Search" component={SearchScreen} />
-        <Tab.Screen name="Stocks" component={StocksScreen} />
+        <Tab.Screen 
+          name="Search" 
+          component={SearchScreen}
+          options={{
+            title: 'Search',
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-search" />
+          }}
+        />
+        <Tab.Screen 
+          name="Stocks" 
+          component={StocksScreen} 
+          options={{
+            title: 'Stocks',
+            tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-trending-up" />,
+          }}
+        />
       </Tab.Navigator>
     
   )

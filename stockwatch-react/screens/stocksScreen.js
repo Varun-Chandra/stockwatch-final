@@ -51,6 +51,8 @@ export default function StocksScreen( {navigation} )
     <ScrollView>
       <Text style={styles.textHeader}> Hello {`${usr}`}! </Text>
       <Text style={styles.bodyText}>Here is your watchlist! Select any stock from this list to view its performance!</Text>
+      <Text style={styles.smallText}>Data shown here is in the following form:</Text>
+      <Text style={styles.smallText}> {`<Stock> - (<Current Price>) - (<Change in value from prev. day>)`} </Text>
       {/* {DXCM} - {0.3} - {400.19} */}
       <FlatList
           data={entries}
@@ -62,7 +64,7 @@ export default function StocksScreen( {navigation} )
               }}
               > 
                 <Text style={styles.item}>
-                  {item.symbol} - ({item.changes}) - ({item.price}) 
+                  {item.symbol} - (Price {`->`} {item.price}) - (Change {`->`} {item.changes})
                 </Text>
 
               </TouchableOpacity>
@@ -91,6 +93,11 @@ const styles = StyleSheet.create({
     bodyText: {
       color: 'white',
       fontSize: 18
+    },
+    smallText: {
+      color: 'white',
+      fontSize: 14,
+      paddingTop: 20
     },
     item: {
       flex: 1,
