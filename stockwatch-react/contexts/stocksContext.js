@@ -63,7 +63,8 @@ export const useStocksContext = () => {
       //Retrieve from DB
       axios.post(RETRIEVAL_URL, reqBody)
       .then((res) =>{
-        
+        // console.log('inside fetchSymbols...showing data');
+        // console.log(res.data.Symbols);
         let data = res.data.Symbols;
 
         const stateData = data.map((item) => {
@@ -88,6 +89,9 @@ export const useStocksContext = () => {
     retrieveSymbols();
   }, []);
 
+  //console.log('Showing state after retrieve and set');
+  //console.log(JSON.stringify(state));
+ // return { ServerURL: 'http://131.181.190.87:3001', watchList: state,  addToWatchlist };
  return { state, addToWatchlist };
 };
 

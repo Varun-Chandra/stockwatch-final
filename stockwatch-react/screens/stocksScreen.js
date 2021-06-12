@@ -40,8 +40,6 @@ export default function StocksScreen( {navigation} )
           objArr.push(objects);
         })
         setEntries((oldArr) => [...oldArr, ...objArr]);
-        
-        
       })
       .catch((err) => console.log(err));
     })
@@ -64,7 +62,7 @@ export default function StocksScreen( {navigation} )
               }}
               > 
                 <Text style={styles.item}>
-                  {item.symbol} - (Recent Change: {item.changes}) - (Stock Price: {item.price}) 
+                  {item.symbol} - ({item.changes}) - ({item.price}) 
                 </Text>
 
               </TouchableOpacity>

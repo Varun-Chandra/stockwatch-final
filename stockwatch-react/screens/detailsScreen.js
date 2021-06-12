@@ -1,49 +1,56 @@
+/* 
+UPON SELECTION OF SYMBOL IN WATCHLIST, LOAD THIS SCREEN FEEDING IN STOCK SYMBOL 
+*/
+
 import axios from 'axios';
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, ScrollView, View, FlatList, Button, Dimensions, TouchableOpacity} from 'react-native';
 
 import { LineChart, Grid } from 'react-native-svg-charts';
 
-import { useStocksContext } from '../contexts/stocksContext';
-
 import { FMP_API_KEY } from '../api_key';
 
 export default function DetailsScreen( { route, navigation } )
 {
-    const { symbol } = route.params;
+    //Gets symbol from watchlist screen
+    const { symbol } = route.params; 
 
-    const [latestInfo, setLatestInfo] = useState({})
+    //for showing information above graphs
+    const [latestInfo, setLatestInfo] = useState({}); 
 
-    const [dayCount, setDayCount] = useState(3);
+    //day value to feed into API call
+    const [dayCount, setDayCount] = useState(3); 
 
-    const [chartData, setChartData] = useState([]);
+    //state for getting values of change in stock price
+    const [chartChanges, setChartChanges] = useState([]); 
 
-    const [chartChanges, setChartChanges] = useState([]);
-
+    //state for getting values of percentage change in stock price
     const [chartPercentageChanges, setChartPercentageChanges] = useState([]);
 
-    const [dateChanges, setDateChanges] = useState([]);
+    //state for showing date as additional info underneath graphs
+    const [dateChanges, setDateChanges] = useState([]); 
 
-    const { state, addToWatchlist } = useStocksContext();
-
+    //These arrays store key data for change
     let changesArray = [];
     let changesPercentageArray = [];
     let datesArray = [];
 
 
-    //Function to store latest info and chart
+    //Function to store latest info and graph data. Run inside a useEffect later in this component
     function getStockData(day){
-        
-        //let tempDay = 3;
+    
 
         axios.get(`https://financialmodelingprep.com/api/v3/historical-price-full/${symbol}?timeseries=${day}&apikey=${FMP_API_KEY}`)
         .then((res) =>
         {
-            const data = res.data["historical"];
+            const data = res.data["historical"]; //core json response
+
+            //emptying declared arrays so they dont get new values stacked on top of old ones
             changesArray = [];
             changesPercentageArray = [];
             datesArray = [];
             
+            //Storing information from the latest date separately, to display above the graphs
             let latest = {
                 date: data[0].date,
                 close: data[0].close,
@@ -55,11 +62,11 @@ export default function DetailsScreen( { route, navigation } )
                 changePercent: data[0].changePercent
             };
 
-            setLatestInfo(latest);
+            setLatestInfo(latest); //Setting state for latest information
 
             let chart = data.map(item => {  //mapping json data to an array
 
-                //populate two arrays here
+                //populate the three arrays here
                 changesArray.push(item.change);
                 changesPercentageArray.push(item.changePercent);
                 datesArray.push(item.date);
@@ -71,13 +78,16 @@ export default function DetailsScreen( { route, navigation } )
                 }
             })
 
-            chart = chart.reverse(); //To store info from earliest to latest
+
+            //Provided API response records values from latest to earliest
+            //Therefore, arrays for graphing must be reversed
+            chart = chart.reverse(); 
             changesArray = changesArray.reverse();
             changesPercentageArray = changesPercentageArray.reverse();
             datesArray = datesArray.reverse();
 
-            setChartData(chart);
-
+            
+            //setting state arrays to the newly populated arrays
             setChartChanges(changesArray);
             setChartPercentageChanges(changesPercentageArray);
             setDateChanges(datesArray);
@@ -87,6 +97,7 @@ export default function DetailsScreen( { route, navigation } )
     }
 
 
+    //useEffect hook runs everytime dayCount is changed
     useEffect(() => {
         getStockData(dayCount);
     }, [dayCount])
@@ -94,7 +105,8 @@ export default function DetailsScreen( { route, navigation } )
     return(
         <ScrollView>
             <Text style={styles.textHeader}>{symbol}</Text>
-
+            
+            {/* SHOWING LATEST DATE INFORMATION */}
             <Text style={styles.subHeaderText}> Updated as of {latestInfo.date}</Text>
             <Text style={styles.underline}>___________________________________________________________</Text>
 
@@ -146,6 +158,7 @@ export default function DetailsScreen( { route, navigation } )
                 Select any of the options below to see Stock Performance 
             </Text>
 
+            {/* BUTTONS FOR DRAWING GRAPHS */}
             <View style={styles.btnGroup}>
                 <TouchableOpacity onPress={() => setDayCount(7)}>
                 <Text style={styles.textBtn}> Past Week </Text>
