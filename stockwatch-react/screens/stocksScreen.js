@@ -24,44 +24,27 @@ export default function StocksScreen( {navigation} )
   // //hitting the FMP quote API endpoint to populate flatlist with symbol, changesPercentage and price for each stock on watchlist
   useEffect(() => {   
 
-    // state.filter((stateSym) => {     
+    state.filter((stateSym) => {     
       
-    //   axios.get(`https://financialmodelingprep.com/api/v3/quote/${stateSym.symbol}?apikey=${FMP_API_KEY}`)
-    //   .then((res) => {
-    //     const syms = res.data
-    //     let objArr = [];
-    //     syms.map((item) => {
-    //       let objects = {
-    //         symbol: stateSym.symbol,
-    //         changes: item.changesPercentage,
-    //         price: item.price
-    //       }
+      axios.get(`https://financialmodelingprep.com/api/v3/quote/${stateSym.symbol}?apikey=${FMP_API_KEY}`)
+      .then((res) => {
+        const syms = res.data
+        let objArr = [];
+        syms.map((item) => {
+          let objects = {
+            symbol: stateSym.symbol,
+            changes: item.changesPercentage,
+            price: item.price
+          }
 
-    //       objArr.push(objects);
-    //     })
-    //     setEntries((oldArr) => [...oldArr, ...objArr]);
+          objArr.push(objects);
+        })
+        setEntries((oldArr) => [...oldArr, ...objArr]);
         
         
-    //   })
-    //   .catch((err) => console.log(err));
-    // })
-    const mockData = [{
-      symbol: 'Sym1',
-      changes: 'changePercValue1',
-      price: 'Price1'
-    }, {
-      symbol: 'Sym2',
-      changes: 'changePercValue2',
-      price: 'Price2'
-    }, {
-      symbol: 'Sym3',
-      changes: 'changePercValue3',
-      price: 'Price3'
-    }]
-  
-    setEntries(mockData);
-
-    //console.log(entries);
+      })
+      .catch((err) => console.log(err));
+    })
   }, [])
   
   
@@ -81,7 +64,7 @@ export default function StocksScreen( {navigation} )
               }}
               > 
                 <Text style={styles.item}>
-                  {item.symbol} - ({item.changes}) - ({item.price}) 
+                  {item.symbol} - (Recent Change: {item.changes}) - (Stock Price: {item.price}) 
                 </Text>
 
               </TouchableOpacity>

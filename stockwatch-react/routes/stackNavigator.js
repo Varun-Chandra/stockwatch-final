@@ -29,14 +29,3 @@ export default function StackNavigator() {
         </NavigationContainer>
     )
 }
-
-/*
-    <NavigationContainer theme={DarkTheme}>
-      <UserContext.Provider value="null">
-        <Tab.Navigator>
-          <Tab.Screen name="Search" component={SearchScreen} />
-          <Tab.Screen name="Stocks" component={StocksScreen} />
-        </Tab.Navigator>
-      </UserContext.Provider>
-    </NavigationContainer>
- */
