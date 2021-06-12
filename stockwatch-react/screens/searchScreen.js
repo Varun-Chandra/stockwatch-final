@@ -4,19 +4,22 @@ MAIN STOCKS VIEWING AND SEARCHING
 import React, {useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 
-
-
+//Contexts
 import { UserContext } from '../contexts/userContext';
 import { useStocksContext } from '../contexts/stocksContext';
 
+//API key
 import { FMP_API_KEY } from '../api_key';
 
 import axios from 'axios';
 
 export default function SearchScreen( { navigation } )
 {
+  //State variables - stocks is the total list
   const [stocks, setStocks] = useState([{}]);
-  const [filteredStocks, setFilteredStocks] = useState([{}]); //useState for search function
+  //filteredStocks is a filtered list based on search term inserted
+  const [filteredStocks, setFilteredStocks] = useState([{}]); 
+  //To capture search term
   const [search, setSearch] = useState('');
 
 
@@ -24,6 +27,7 @@ export default function SearchScreen( { navigation } )
 
   const { addToWatchlist } = useStocksContext();
 
+  //endpoint to fetch all NASDAQ stocks
   const STOCK_ENDPOINT = `https://financialmodelingprep.com/api/v3/nasdaq_constituent?apikey=${FMP_API_KEY}`;
 
  
@@ -50,8 +54,6 @@ export default function SearchScreen( { navigation } )
       })
   }, [])
 
-  
-
 
   //Function to help search stocks in flatlist
   const filterStock = (text) => {
@@ -63,18 +65,19 @@ export default function SearchScreen( { navigation } )
         const searchTextData = text.toUpperCase();
         return itemData.indexOf(searchTextData) > -1;
       });
-
+      //setting filtered stocks state with updated list
       setFilteredStocks(updatedList);
+      //Keeping search text within textInput as updated list is shown
       setSearch(text);
     }
     else
     {
+      //revert to original list if search is empty
       setFilteredStocks(stocks);
       setSearch(text);
     }
   }
 
-  // keyExtractor= {(item) => item.counter.toString()}
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.textHeader}> 
@@ -103,7 +106,6 @@ export default function SearchScreen( { navigation } )
               //Creating touchable opacity to add item to watchlist on press
               <TouchableOpacity onPress={ () => 
                 {
-                  console.log(`Selected ${item.symbol}`);
                   
                   addToWatchlist(item.symbol);//add to DB
 

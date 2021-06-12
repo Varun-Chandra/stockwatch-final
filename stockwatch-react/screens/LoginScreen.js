@@ -6,16 +6,18 @@ import React, { useState, useContext } from 'react';
 
 import { Alert, Button, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
+//user context for setting state when login is successful
 import { UserContext } from '../contexts/userContext';
 
+//getting IP address to access backend
 import {IP_ADDRESS} from '../getIP';
-
-//const IP_ADDRESS = `http://172.30.71.180`;
 
 export default function LoginScreen( { navigation } ) 
 {
+    //Setting context here for use throughout the application
     const {usr, setUsr} = useContext(UserContext);
 
+    //state values for use in textinputs
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');    
 
@@ -24,7 +26,7 @@ export default function LoginScreen( { navigation } )
             <Text style={styles.textHeader}> StockWatch Mobile</Text>
             <Text style={styles.subHeaderText}> Welcome! Please enter your credentials!</Text>
 
-            {/* Username and Password FieldInputs */}
+            {/* Username and Password TextInputs */}
             <Text style={styles.subHeaderText}> Username</Text>
             <TextInput 
                 style={styles.textInput}
@@ -47,30 +49,25 @@ export default function LoginScreen( { navigation } )
             disabled={(!password) || (!username)}
             onPress={ async () => {
 
-                console.log(`Username - ${username}`)
-                console.log(`Password - ${password}`)
-
+                //creating json object for request body
                 const data = {
                     'username': `${username}`,
                     'password': `${password}`
                 }
 
+                //Querying backend URL to check
                 const LOGIN_CHECK = `${IP_ADDRESS}:3001/users/fetchUser`
 
-
-                //Authenticate User here
+                //User Authentication via post call to url
                 await axios.post(LOGIN_CHECK, data)
                 .then((res) => {
                     if (res.data.Error === true)
                     {
-                        console.log("User does not exist");
                         Alert.alert('Sorry!', 'User does not exist!');
                     }
                     else
                     {
                         setUsr(username);//For context
-
-                        console.log("User Exists");
                         navigation.navigate("App");
                     }
                 })
@@ -78,7 +75,7 @@ export default function LoginScreen( { navigation } )
                 
             }} 
             />
-
+            {/* Showing register button info at the end */}
             <View>
                 <Text style={styles.subHeaderText}> Don't have an account?</Text>
                 <TouchableOpacity onPress={() => {navigation.navigate("Register")}}>

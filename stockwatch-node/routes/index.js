@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
-//const axios = require("axios");
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
@@ -30,6 +28,7 @@ router.post('/insertSymbol', function(req, res, next){
   const username = req.body.username;
   const symbol = req.body.symbol;
 
+  //Checking if symbol already exists in DB
   const querySymbols = req.db.from('watchList').select("*").where("symbol", '=', symbol).andWhere("username", '=', username)
 
   querySymbols.then((symbols) => {
@@ -39,6 +38,7 @@ router.post('/insertSymbol', function(req, res, next){
       return;
     }
 
+    //no existing combination of username and symbol, so we insert into DB
     return req.db.insert({symbol: `${symbol}`, username: `${username}`}).into('watchList');
   })
   .catch((err) => {
@@ -49,42 +49,4 @@ router.post('/insertSymbol', function(req, res, next){
   return res.json({"Error" : false, "Message" : "Symbol Added to DB!"});
 });
 
-
 module.exports = router;
-
-/*
-
-//FOR SEARCH - HIT THIS URL TO GET ALL STOCKS LISTED ON NASDAQ
-router.get('/stocks', function(req, res, next){
- 
-  const STOCK_ENDPOINT = `https://financialmodelingprep.com/api/v3/nasdaq_constituent?apikey=${FMP_API_KEY}`;
-  
-  axios.get(STOCK_ENDPOINT)
-  .then((response) => {
-    const {data} = response;
-    //console.log(data); //works...
-    return res
-    .status(200)
-    .json(data); //works...
-  })
-  .catch((err) => res.json(err));  
-
-});
-
-//FOR STOCK HISTORY - HIT THIS URL TO GET HISTORY OF STOCK PERFORMANCE, SHOW CHANGEVALUES AND CHANGEPERCENTAGE
-router.get('/stockHistory/:symbol', function(req, res, next){
-  const {symbol} = req.params;
-  const HISTORY_ENDPOINT = `https://financialmodelingprep.com/api/v3/historical-price-full/${symbol}?apikey=${API_KEY}`
-
-  axios.get(HISTORY_ENDPOINT)
-  .then((response) => {
-    const {data} = response;
-    //console.log(data); //works...
-    return res
-    .status(200)
-    .json(data); //check if it works
-  })
-  .catch((err) => res.json(err));
-});
-
-*/

@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 //USER REGISTRATION
 router.post('/register', function(req, res, next){
 
-
+  //getting parameters from json body
   const email=req.body.email;
   const username=req.body.username;
   const password=req.body.password;
@@ -19,23 +19,18 @@ router.post('/register', function(req, res, next){
   const queryUsers = req.db.from('users').select("*").where("email", '=', email)
 
 
-
   queryUsers.then((users) =>{
     
     if (users.length > 0) 
     {
       console.log("User already exists")
-
-      //return res.json({"Error" : true, "Message" : "User already exists in DB!"});
       return;
-      //return res.status(401).json({"Error": true, "Message": "Unauthorized - User already exists in DB!"});
-      
     }
     //Encrypting password
     const saltRounds = 10
     const hash = bcrypt.hashSync(password, saltRounds);
 
- 
+    //inserting user into DB
     return req.db.insert({email: `${email}`, username: `${username}`, password: `${hash}`}).into('users');
   })
   .catch((err) => {
@@ -50,9 +45,11 @@ router.post('/register', function(req, res, next){
 //USER LOGIN
 router.post('/fetchUser', function(req, res, next) {
 
+  //getting parameters from json body
   const username = req.body.username;
   const password = req.body.password;
 
+  //checking for user in DB
   const queryUsers = req.db.from('users').where('username', '=' , `${username}`).select("username", "password") 
 
 
@@ -60,22 +57,19 @@ router.post('/fetchUser', function(req, res, next) {
     if(rows.length === 0)
     {
       //user doesnt exist
-      return;
-      //return res.json({"Error" : true, "Message" : "User not found", "users" : rows});  
+      return; 
     }
     
     const user=rows[0]
 
     return bcrypt.compare(password, user.password);
 
-    //return res.json({"Error" : false, "Message" : "Success", "users" : rows});
   })
   .then((match) =>{
     if (!match)
     {
       console.log('Passwords dont match')
       return;
-      //res.status(401).json({"Error": true, "Message": "Unauthorized - Passwords do not match"});
     }
 
     console.log('passwords match')

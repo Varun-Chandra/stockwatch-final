@@ -3,11 +3,13 @@ UPON SELECTION OF SYMBOL IN WATCHLIST, LOAD THIS SCREEN FEEDING IN STOCK SYMBOL
 */
 
 import axios from 'axios';
-import React, { useContext, useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Text, ScrollView, View, FlatList, Button, Dimensions, TouchableOpacity} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, ScrollView, View, TouchableOpacity} from 'react-native';
 
+//Graphing library
 import { LineChart, Grid } from 'react-native-svg-charts';
 
+//Importing API key
 import { FMP_API_KEY } from '../api_key';
 
 export default function DetailsScreen( { route, navigation } )
@@ -39,11 +41,14 @@ export default function DetailsScreen( { route, navigation } )
     //Function to store latest info and graph data. Run inside a useEffect later in this component
     function getStockData(day){
     
+        //Endpoint to retrieve graph data and other information
+        const HISTORICAL_ENDPOINT = `https://financialmodelingprep.com/api/v3/historical-price-full/${symbol}?timeseries=${day}&apikey=${FMP_API_KEY}`;
 
-        axios.get(`https://financialmodelingprep.com/api/v3/historical-price-full/${symbol}?timeseries=${day}&apikey=${FMP_API_KEY}`)
+        axios.get(HISTORICAL_ENDPOINT)
         .then((res) =>
         {
-            const data = res.data["historical"]; //core json response
+            //from response, "historical" has the information we require
+            const data = res.data["historical"]; 
 
             //emptying declared arrays so they dont get new values stacked on top of old ones
             changesArray = [];
@@ -64,7 +69,8 @@ export default function DetailsScreen( { route, navigation } )
 
             setLatestInfo(latest); //Setting state for latest information
 
-            let chart = data.map(item => {  //mapping json data to an array
+            //mapping json data to an array
+            let chart = data.map(item => {  
 
                 //populate the three arrays here
                 changesArray.push(item.change);
@@ -77,7 +83,6 @@ export default function DetailsScreen( { route, navigation } )
                   changePercent: item.changePercent                
                 }
             })
-
 
             //Provided API response records values from latest to earliest
             //Therefore, arrays for graphing must be reversed
@@ -306,34 +311,3 @@ const styles = StyleSheet.create({
         color: 'white'
     }
   });
-
-  /*
-  //console.log(data);//grab change, changePercent
-             Object {
-            "adjClose": 398.98,
-            "change": 8.58,
-            "changeOverTime": 0.02198,
-            "changePercent": 2.198,
-            "close": 398.98,
-            "date": "2021-06-10",
-            "high": 399.68,
-            "label": "June 10, 21",
-            "low": 387.03,
-            "open": 390.4,
-            "unadjustedVolume": 824700,
-            "volume": 824700,
-            "vwap": 395.23,
-
-//mock linechart data - [50, 10, 40, 95, 85, 91, 35, 53, 24, 50]
-    //let mData = [50, 10, 40, 95, 85, 91, 35, 53, 24, 50];
-    // let mockData = [{val: 50, x: 1, y: 1}, 
-    //     {val: 10, x: 1, y: 1}, 
-    //     {val: 40, x: 2, y: 2}, 
-    //     {val: 95, x: 3, y: 3}, 
-    //     {val: 85, x: 4, y: 4}, 
-    //     {val: 91, x: 5, y: 5}, 
-    //     {val: 35, x: 6, y: 6}, 
-    //     {val: 53, x: 7, y: 7}, 
-    //     {val: 24, x: 8, y: 8}, 
-    //     {val: 50, x: 9, y: 9}];
-   */
