@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -69,6 +69,7 @@ router.post('/fetchUser', function(req, res, next) {
     if (!match)
     {
       console.log('Passwords dont match')
+      res.json({"Error" : true, "Message" : "Passwords dont match"})
       return;
     }
 

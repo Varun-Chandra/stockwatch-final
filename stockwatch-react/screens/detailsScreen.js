@@ -194,7 +194,7 @@ export default function DetailsScreen( { route, navigation } )
             {/* CHANGES GRAPH DETAILS */}
             <View style={styles.graphYContainer}>
                 <Text style={styles.graphYText}> 
-                    y-axis - Change Values ( Lowest {`=`} {Math.min(...chartChanges)}) (Highest {`->`} {Math.max(...chartChanges)}) 
+                    y-axis - Change Values ( Lowest {`=`} {Math.min(...chartChanges)}) (Highest {`=`} {Math.max(...chartChanges)}) 
                 </Text>
                 <Text style={styles.graphXText}> 
                     x-axis - Earliest to Latest Dates for Past {dayCount} days ({dateChanges[0]} {`->`} {dateChanges[dateChanges.length - 1]})

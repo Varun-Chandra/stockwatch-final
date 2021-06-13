@@ -8,6 +8,7 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "description": ""
+    "description": "Application developed by Varun Chandramouleeswaran for IFN666 - Web and Mobile Application Development",
+    "githubUrl": "https://github.com/Varun-Chandra/stockwatch-final"
   }
 }

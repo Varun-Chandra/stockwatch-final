@@ -21,6 +21,7 @@ export default function RegisterScreen( { navigation } )
             <Text style={styles.subHeaderText}> Email</Text>
             <TextInput 
                 style={styles.textInput}
+                textContentType='emailAddress'
                 placeholder='Enter Email..'
                 onChangeText = {text => setEmail(text)}
             />
